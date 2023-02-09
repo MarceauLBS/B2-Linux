@@ -3,6 +3,7 @@
 ## I. Le Gentil Setup
 
 Salut mon petit chat !
+
 Je vais te montrer comment installer un serveur Emby, y mettre un reverse proxy et installer un client nfs + un script de backup ^^
 
 Installation trop dure (Emby server) :
@@ -59,8 +60,11 @@ emby       44294  1.6 16.2 3172408 160164 ?      Ssl  22:28  0:06 /opt/emby-serv
 marceau     44377  0.0  0.2   6408  2172 pts/0    S+   22:32   0:00 grep --color=auto emby-server
 ```
 Pour accéder à l'interface web, nous allons faire quelques manip' ! Suit bien !
+
 ATTENTION ! Il ne faut pas oublier d'ouvrir le firewall petit chat !!
+
 Nous allons donc ouvrir un port firewall (ou pare-feu pour les pures Frenchy)
+
 Pour ce faire nous allons nous souvenir des petits bateaux (pour trouver le port) ^^
 ```
 [marceau@localhost /]$ sudo firewall-cmd --permanent --add-port=8096/tcp
@@ -69,8 +73,11 @@ success
 success
 ```
 Pour la suite, nous allons voir comment accueillir nos médias !
+
 Alors mon petit chat qu'est-ce qu'on fait maintenant ?
+
 (Toi): *hmmmmm*
+
 Bon je vais t'aider : nous allons créer un répertoire pour les mettre biens au chaud ! 
 ```
 [marceau@localhost /]$ sudo mkdir /srv/media
@@ -90,13 +97,17 @@ emby@10.25.1.11's password:
 ChantDeChats.mp3                                                                  100% 4057KB  99.1MB/s   00:00
 ```
 Bon mon petit chat, la Partie 1 est terminée !! Bravo à toi !! Pour fêter ça ... Tu veux t'ambiancer ? 
+
 Tu peux le faire grâce à quelques manip' ! Il te suffit de mettre le chemin de tes médias directement depuis ton serveur Emby !
+
 Enjoy !! <3
 
 ## 2. Le Méchant Reverse Proxy
 
 BON ! Tu vas m'écouter maintenant (stp)
+
 On est sur la Partie 2 et c'est pas de la rigolade !!!
+
 Tu vas mettre en place NGINX et plus vite que ça 😡
 ```
 [marceau@localhost ~]$ sudo dnf install nginx
@@ -120,6 +131,7 @@ Feb 07 10:52:23 proxy nginx[40372]: nginx: configuration file /etc/nginx/nginx.c
 Feb 07 10:52:23 proxy systemd[1]: Started The nginx HTTP and reverse proxy server.
 ```
 Ok ok je vois ... tu es coriace ...
+
 Tu sais me trouver tous les ports ?
 ```
 [marceau@localhost ~]$ sudo ss -alpnt
@@ -137,6 +149,7 @@ success
 success
 ```
 Tu es plutôt fort je dois le reconnaître ... 
+
 Détermine les user de NGINX "Monsieur je sais tout" !
 ```
 [marceau@localhost ~]$ ps -ef | grep nginx
@@ -145,6 +158,7 @@ nginx      40375   40374  0 10:52 ?        00:00:00 nginx: worker process
 marceau     40402     960  0 10:52 pts/0    00:00:00 grep --color=auto nginx
 ```
 Ouais ouais c'est ça c'est ça ... *a le seum* 
+
 Et tout ça tu peux y accéder ?
 ```
 [marceau@localhost ~]$ curl 10.25.1.12:80
@@ -154,7 +168,9 @@ Et tout ça tu peux y accéder ?
     [...]
 ```
 Bon c'est bien tu travailles bien à l'école...
+
 Configure bien NGINX et on verra si je suis plus doux !
+
 Et je veux pas un mot !
 ```
 [marceau@localhost ~]$ cat /etc/nginx/conf.d/nginx.conf
@@ -189,6 +205,7 @@ server {
 }
 ```
 Tu m'fais c***r à la fin !!!!
+
 Dépêche toi de mettre en place le HTTPS
 ```
 [marceau@localhost ~]$ openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout server.key -out server.crt
@@ -246,12 +263,16 @@ Modifie le fichier host c'est horrible là ...
 10.25.1.12    emby.peche.linux
 ````
 Tu te débrouilles bien ... 
+
 Redémarre NGINX pour la suite !
+
 ````
 [marceau@localhost ~]$ sudo systemctl restart nginx
 ````
 T'as presque finis ... MAIS CROIS PAS QUE T'ES FORT HEIN !
+
 On va faire un mini peu de sécu ... tiens toi prêt !
+
 Fais en sorte qu'il soit joignable uniquement par ````proxy.peche.linux````.
 ```
 [marceau@localhost ~]$ cat /etc/sysctl.conf | tail -n 1
@@ -260,8 +281,11 @@ net.ipv4.icmp_echo_ignore_all = 1
 net.ipv4.icmp_echo_ignore_all = 1
 ```
 Bon t'as fais du bon boulot... 
+
 C'est bien mais t'as pas finis à temps malheureusement ... 
+
 Tu n'as réussis à faire que les 2 premières parties 😥
+
 C'est dommage mais peut-être une prochaine fois !
 
 ![Triste](./pics/unnamed.jpg)
